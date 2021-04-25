@@ -1,0 +1,53 @@
+let barposition = "bottom"
+let regexp = "false"
+let incsearch = "false"
+let defaultengine = "duckduckgo"
+unmap x
+unmap s
+map d :call myCloseTab<CR>
+map D :call myCloseTabR<CR>
+map R gR
+unmap t
+unmap b
+map <A-u> <Tab>
+map <C-f> scrollPageDown
+map <C-b> scrollPageUp
+map <C-c> cancelWebRequest
+map u X
+iunmap <C-e>
+iunmap <C-f>
+iunmap <C-b>
+iunmap <C-h>
+unmap a
+" yank '%title% - %url%'
+ copyTitleUrl() -> {{
+  RUNTIME('getRootUrl', function(url) {
+	//clipboard.js
+	var t = document.createElement('textarea');
+	t.style.position = 'absolute';
+	t.style.left = '-100%';
+	var url_plus = document.title + "\n" + url + "\n";
+	t.value = url_plus
+	document.body.appendChild(t);
+	t.select();
+	document.execCommand('Copy');
+	document.body.removeChild(t);
+	Status.setMessage(url_plus, 2);
+    });
+}}
+map y :call copyTitleUrl<CR>
+
+cvimGoHome() -> {{
+  location.href="http://localhost/homepage.html";
+}}
+map gh :call cvimGoHome<CR>
+
+myCloseTab(repeats) -> {{
+    RUNTIME('previousTab', {repeats: repeats});
+    RUNTIME('closeTab', {repeats: repeats});
+}}
+
+myCloseTabR(repeats) -> {{
+    RUNTIME('nextTab', {repeats: repeats});
+    RUNTIME('closeTab', {repeats: repeats});
+}}
